@@ -1,0 +1,13 @@
+{
+  "name": "alpha-ads-earn",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "mongoose": "^8.9.5",
+    "node-telegram-bot-api": "^0.66.0"
+  }
+}
