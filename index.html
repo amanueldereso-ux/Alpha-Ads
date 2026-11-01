@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alpha Ads Earn</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://sad.adsgram.ai/js/sad.min.js"></script>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+ font-family:Arial,sans-serif;
+ background:#f2f6ff;
+ color:#17233c;
+ padding-bottom:85px;
+}
+header{
+ background:linear-gradient(135deg,#0754db,#168bff);
+ color:white;padding:25px 20px;
+ border-radius:0 0 25px 25px;
+}
+header h2{font-size:23px}
+header p{margin-top:7px;font-size:13px;opacity:.9}
+.container{padding:17px}
+.card{
+ background:white;padding:18px;
+ border-radius:17px;margin-bottom:15px;
+ box-shadow:0 4px 15px #dce6f5;
+}
+.balance{
+ background:linear-gradient(135deg,#0754db,#168bff);
+ color:white;padding:23px;border-radius:20px;
+ margin-bottom:17px;
+}
+.balance small{opacity:.85}
+.balance h1{font-size:34px;margin:10px 0}
+.stats{
+ display:grid;grid-template-columns:1fr 1fr;gap:12px;
+}
+.stat{
+ background:white;padding:17px;border-radius:15px;
+ box-shadow:0 3px 12px #dce6f5;
+}
+.stat h2{color:#0863e8;margin-top:9px}
+button{
+ border:0;border-radius:12px;padding:14px;
+ font-weight:bold;font-size:15px;cursor:pointer;
+}
+.primary{background:#0865e8;color:white;width:100%}
+.secondary{background:#e5efff;color:#0754db;width:100%}
+input,select{
+ width:100%;padding:14px;border:1px solid #d7e1f0;
+ border-radius:11px;margin:9px 0 15px;
+ font-size:15px;background:white;
+}
+label{font-size:13px;font-weight:bold}
+nav{
+ position:fixed;bottom:0;left:0;right:0;
+ display:flex;justify-content:space-around;
+ background:white;padding:12px 3px;
+ box-shadow:0 -3px 15px #dce6f5;
+ z-index:5;
+}
+nav button{
+ background:transparent;color:#63738e;
+ font-size:11px;padding:7px 5px;
+}
+nav button.active{color:#0865e8}
+.page{display:none}
+.page.active{display:block}
+.center{text-align:center}
+.logo{
+ width:75px;height:75px;border-radius:22px;
+ background:#0865e8;color:white;
+ display:flex;align-items:center;justify-content:center;
+ font-size:32px;font-weight:bold;margin:10px auto 18px;
+}
+.notice{
+ background:#e8f1ff;padding:13px;border-radius:12px;
+ font-size:13px;line-height:1.6;margin-bottom:15px;
+}
+.small{font-size:12px;color:#71809a;line-height:1.6}
+.hidden{display:none!important}
+#message{
+ position:fixed;top:15px;left:5%;width:90%;
+ padding:13px;background:#17233c;color:white;
+ border-radius:10px;text-align:center;
+ display:none;z-index:20;
+}
+</style>
+</head>
+
+<body>
+
+<div id="message"></div>
+
+<!-- JOIN PAGE -->
+<div id="joinPage" class="page">
+ <header class="center">
+  <div class="logo">A</div>
+  <h2>ALPHA ADS EARN</h2>
+  <p>Join our official Telegram community</p>
+ </header>
+
+ <div class="container">
+  <div class="card center">
+   <h2>📢 Join Our Channel</h2>
+   <p class="small" style="margin:15px 0">
+    To access Alpha Ads Earn, please join our official Telegram channel
+    and verify your membership.
+   </p>
+
+   <button class="primary" onclick="joinChannel()">
+    JOIN CHANNEL
+   </button>
+
+   <br><br>
+
+   <button class="secondary" onclick="verifyChannel()">
+    ✅ VERIFY MEMBERSHIP
+   </button>
+
+   <p class="small" id="verifyStatus" style="margin-top:15px">
+    Please join the channel first.
+   </p>
+  </div>
+ </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="mainApp" class="hidden">
+
+<header>
+ <h2>🔵 ALPHA ADS EARN</h2>
+ <p>Welcome, <span id="username">User</span> 👋</p>
+</header>
+
+<div class="container">
+
+<!-- HOME -->
+<section id="home" class="page active">
+
+ <div class="balance">
+  <small>AVAILABLE BALANCE</small>
+  <h1><span id="balance">0.00</span> ETB</h1>
+  <small>Your Alpha Ads Earn wallet</small>
+ </div>
+
+ <div class="stats">
+  <div class="stat">
+   <small>Total Earned</small>
+   <h2><span id="earned">0.00</span> ETB</h2>
+  </div>
+
+  <div class="stat">
+   <small>Ads Watched</small>
+   <h2 id="adsWatched">0</h2>
+  </div>
+
+  <div class="stat">
+   <small>Referrals</small>
+   <h2 id="referrals">0</h2>
+  </div>
+
+  <div class="stat">
+   <small>Reward / Ad</small>
+   <h2>0.40 ETB</h2>
+  </div>
+ </div>
+
+ <br>
+
+ <div class="card">
+  <h3>🎬 Watch Ads & Earn</h3>
+  <p class="small" style="margin:10px 0">
+   Watch eligible rewarded advertisements to earn rewards.
+  </p>
+  <button class="primary" onclick="showAd()">
+   ▶ WATCH AD
+  </button>
+ </div>
+
+ <div class="card">
+  <h3>💸 Withdraw Money</h3>
+  <p class="small" style="margin:10px 0">
+   Minimum withdrawal: 50 ETB
+  </p>
+  <button class="secondary" onclick="openPage('withdraw')">
+   WITHDRAW NOW
+  </button>
+ </div>
+
+</section>
+
+<!-- TASKS -->
+<section id="tasks" class="page">
+ <div class="card">
+  <h2>🎬 Watch Advertisements</h2>
+  <p class="small" style="margin:12px 0">
+   Reward: 0.40 ETB per eligible completed ad.
+  </p>
+  <button class="primary" onclick="showAd()">
+   WATCH AD NOW
+  </button>
+  <br><br>
+  <p class="small">
+   Ads availability depends on the advertising network.
+  </p>
+ </div>
+</section>
+
+<!-- REFERRAL -->
+<section id="referral" class="page">
+ <div class="card center">
+  <h2>👥 Invite Friends</h2>
+  <h1 style="color:#0865e8;margin:18px">3 ETB</h1>
+  <p class="small">Referral reward per eligible new user.</p>
+
+  <input id="refLink" readonly>
+
+  <button class="primary" onclick="copyReferral()">
+   COPY INVITE LINK
+  </button>
+
+  <br><br>
+
+  <button class="secondary" onclick="shareReferral()">
+   SHARE WITH FRIENDS
+  </button>
+ </div>
+</section>
+
+<!-- WITHDRAW -->
+<section id="withdraw" class="page">
+ <div class="card">
+  <h2>💸 Withdraw</h2>
+
+  <div class="notice">
+   Minimum withdrawal: <b>50 ETB</b><br>
+   Minimum ads watched: <b>30 Ads</b><br>
+   Payment methods: <b>Telebirr / CBE</b>
+  </div>
+
+  <label>Withdrawal Amount (ETB)</label>
+  <input id="withdrawAmount" type="number" min="50"
+   placeholder="Enter amount">
+
+  <label>Payment Method</label>
+  <select id="paymentMethod">
+   <option value="Telebirr">Telebirr</option>
+   <option value="CBE">CBE</option>
+  </select>
+
+  <label>Account Number</label>
+  <input id="accountNumber" placeholder="Enter your account number">
+
+  <button class="primary" onclick="withdrawMoney()">
+   SUBMIT WITHDRAWAL
+  </button>
+ </div>
+</section>
+
+<!-- PROFILE -->
+<section id="profile" class="page">
+ <div class="card center">
+  <div class="logo">A</div>
+  <h2 id="profileName">Alpha User</h2>
+  <p class="small" id="telegramId"></p>
+  <br>
+  <p>🔵 Alpha Ads Earn Member</p>
+  <br>
+  <button class="secondary" onclick="verifyChannel()">
+   VERIFY CHANNEL AGAIN
+  </button>
+ </div>
+</section>
+
+</div>
+
+<nav>
+ <button class="active" onclick="openPage('home',this)">🏠<br>Home</button>
+ <button onclick="openPage('tasks',this)">🎬<br>Tasks</button>
+ <button onclick="openPage('referral',this)">👥<br>Invite</button>
+ <button onclick="openPage('withdraw',this)">💸<br>Withdraw</button>
+ <button onclick="openPage('profile',this)">👤<br>Profile</button>
+</nav>
+
+</div>
+
+<script>
+const tg = window.Telegram.WebApp;
+tg.ready();
+tg.expand();
+
+const API = "";
+const CHANNEL_LINK = "https://t.me/alpha_ads_earn";
+
+// IMPORTANT: Replace with your real AdsGram Reward block ID.
+const ADSGRAM_BLOCK_ID = "YOUR_ADSGRAM_BLOCK_ID";
+
+let adController = null;
+let currentUser = null;
+
+function notify(text){
+ const box = document.getElementById("message");
+ box.innerText = text;
+ box.style.display = "block";
+ setTimeout(()=>box.style.display="none",3000);
+}
+
+async function api(path, data=null){
+ const options = {
+  method:data ? "POST":"GET",
+  headers:{
+   "Content-Type":"application/json",
+   "X-Telegram-Init-Data":tg.initData
+  }
+ };
+
+ if(data) options.body=JSON.stringify(data);
+
+ const response=await fetch(API+path,options);
+ const result=await response.json();
+
+ if(!response.ok){
+  throw new Error(result.message || "Request failed");
+ }
+
+ return result;
+}
+
+function joinChannel(){
+ tg.openTelegramLink(CHANNEL_LINK);
+}
+
+async function verifyChannel(){
+ try{
+  if(!tg.initData){
+   notify("Please open this app inside Telegram.");
+   return;
+  }
+
+  document.getElementById("verifyStatus").innerText=
+   "Checking your membership...";
+
+  const result=await api("/api/verify-channel",{});
+
+  if(result.success && result.joined){
+   document.getElementById("joinPage").classList.add("hidden");
+   document.getElementById("mainApp").classList.remove("hidden");
+   await loadUser();
+   notify("Channel verified successfully!");
+  }else{
+   document.getElementById("verifyStatus").innerText=
+    "❌ Not joined yet. Join the channel and try again.";
+  }
+
+ }catch(error){
+  document.getElementById("verifyStatus").innerText=error.message;
+  notify(error.message);
+ }
+}
+
+async function loadUser(){
+ try{
+  const result=await api("/api/me");
+
+  if(!result.success){
+   document.getElementById("mainApp").classList.add("hidden");
+   document.getElementById("joinPage").classList.remove("hidden");
+   return;
+  }
+
+  currentUser=result.user;
+
+  document.getElementById("username").innerText=
+   tg.initDataUnsafe?.user?.first_name || "User";
+
+  document.getElementById("profileName").innerText=
+   tg.initDataUnsafe?.user?.first_name || "Alpha User";
+
+  document.getElementById("telegramId").innerText=
+   "Telegram ID: "+result.user.telegramId;
+
+  document.getElementById("balance").innerText=
+   Number(result.user.balance).toFixed(2);
+
+  document.getElementById("earned").innerText=
+   Number(result.user.totalEarned).toFixed(2);
+
+  document.getElementById("adsWatched").innerText=
+   result.user.adsWatched;
+
+  document.getElementById("referrals").innerText=
+   result.user.referrals;
+
+  const botUsername="YOUR_BOT_USERNAME";
+
+  document.getElementById("refLink").value=
+   "https://t.me/"+botUsername+"?start="+result.user.telegramId;
+
+ }catch(error){
+  notify(error.message);
+ }
+}
+
+function openPage(name,button){
+ document.querySelectorAll(".container .page").forEach(p=>{
+  p.classList.remove("active");
+ });
+
+ document.getElementById(name).classList.add("active");
+
+ document.querySelectorAll("nav button").forEach(b=>{
+  b.classList.remove("active");
+ });
+
+ if(button) button.classList.add("active");
+ else{
+  const buttons=[...document.querySelectorAll("nav button")];
+  const index=["home","tasks","referral","withdraw","profile"].indexOf(name);
+  if(buttons[index])buttons[index].classList.add("active");
+ }
+}
+
+async function showAd(){
+ try{
+  if(!ADSGRAM_BLOCK_ID || ADSGRAM_BLOCK_ID==="YOUR_ADSGRAM_BLOCK_ID"){
+   notify("Please configure your AdsGram Block ID first.");
+   return;
+  }
+
+  if(!window.Adsgram){
+   notify("AdsGram SDK is not loaded.");
+   return;
+  }
+
+  if(!adController){
+   adController=window.Adsgram.init({
+    blockId:ADSGRAM_BLOCK_ID,
+    debug:false
+   });
+  }
+
+  notify("Loading advertisement...");
+
+  const result=await adController.show();
+
+  if(result && result.done){
+   notify("Ad completed. Waiting for verified reward...");
+   // Do not credit balance from the browser.
+   // The backend must credit only after a trusted AdsGram
+   // server confirmation and duplicate-event protection.
+   setTimeout(loadUser,2500);
+  }else{
+   notify("Ad was not completed.");
+  }
+
+ }catch(error){
+  console.error(error);
+  notify("Ad unavailable or skipped. Please try again later.");
+ }
+}
+
+async function withdrawMoney(){
+ const amount=Number(document.getElementById("withdrawAmount").value);
+ const method=document.getElementById("paymentMethod").value;
+ const account=document.getElementById("accountNumber").value.trim();
+
+ if(!amount || amount<50){
+  notify("Minimum withdrawal is 50 ETB.");
+  return;
+ }
+
+ if(!account){
+  notify("Please enter your account number.");
+  return;
+ }
+
+ try{
+  const result=await api("/api/withdraw",{
+   amount,
+   method,
+   account
+  });
+
+  notify(result.message || "Withdrawal request submitted.");
+  document.getElementById("withdrawAmount").value="";
+  document.getElementById("accountNumber").value="";
+  await loadUser();
+
+ }catch(error){
+  notify(error.message);
+ }
+}
+
+function copyReferral(){
+ const input=document.getElementById("refLink");
+ input.select();
+ input.setSelectionRange(0,99999);
+ navigator.clipboard.writeText(input.value)
+ .then(()=>notify("Referral link copied!"))
+ .catch(()=>notify("Could not copy link."));
+}
+
+function shareReferral(){
+ const link=document.getElementById("refLink").value;
+ const text="Join Alpha Ads Earn and start earning rewards!";
+ tg.openTelegramLink(
+  "https://t.me/share/url?url="+encodeURIComponent(link)+
+  "&text="+encodeURIComponent(text)
+ );
+}
+
+// Start
+if(tg.initData){
+ document.getElementById("joinPage").classList.remove("hidden");
+ verifyChannel();
+}else{
+ document.getElementById("joinPage").classList.remove("hidden");
+ document.getElementById("verifyStatus").innerText=
+  "Open Alpha Ads Earn from Telegram to continue.";
+}
+</script>
+
+</body>
+</html>
